@@ -1,0 +1,1 @@
+/home/coderiot/.config/nvim/plugged/vim-janah/colors/janah.vim

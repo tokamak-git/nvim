@@ -1,0 +1,1 @@
+/home/coderiot/.config/nvim/plugged/FlatColor/colors/flatcolor.vim
