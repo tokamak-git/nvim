@@ -1,4 +1,10 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =2
-let g:netrw_dirhist_1='/home/coderiot/go/src/github.com/networkinss/go'
-let g:netrw_dirhist_2='/home/coderiot/go/src/github.com/networkinss/go/don'
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='/home/coderiot'
+let g:netrw_dirhist_2='/home/coderiot/go/src/github.com/raghuvanshy/serviceWorker'
+let g:netrw_dirhist_3='/home/coderiot/go/src/github.com/raghuvanshy/serviceWorker/static'
+let g:netrw_dirhist_4='/home/coderiot/go/src/github.com/raghuvanshy/serviceWorker'
+let g:netrw_dirhist_5='/home/coderiot/go/src/github.com/raghuvanshy/serviceWorker/static'
+let g:netrw_dirhist_6='/home/coderiot/go/src/github.com/raghuvanshy/serviceWorker'
+let g:netrw_dirhist_7='/home/coderiot/go/src/github.com/raghuvanshy/serviceWorker/static'
+let g:netrw_dirhist_8='/home/coderiot/go/src/github.com/raghuvanshy/serviceWorker'
