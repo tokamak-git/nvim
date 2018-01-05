@@ -45,9 +45,9 @@ set number
 set relativenumber
 
 "
-set foldmethod=syntax
-set foldlevel=1
-set foldclose=all
+"set foldmethod=syntax
+"set foldlevel=1
+"set foldclose=all
 
 set cursorline 
 
@@ -79,12 +79,18 @@ set tw=80
 set lazyredraw
 
 " Enable folds but open them by default
-set foldenable foldlevelstart=10
+""set foldenable foldlevelstart=10
 
 " write a buff when switching off to it
 set autowrite
 
+" Easy align
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
 
+" enter newline before or after current line
+nmap <S-Enter> O<Esc>j
+nmap <CR> o<Esc>k
 
 " Install Vim Plug if not installed
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
@@ -95,6 +101,10 @@ endif
 
 " Set the runtime path to include vim plug
 call plug#begin()
+
+
+Plug 'shemerey/vim-project'
+
 " Go integration
 " Vim-go
 Plug 'fatih/vim-go', { 'for': ['go'], 'do': ':GoInstallBinaries' }
@@ -203,8 +213,8 @@ let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 " sets quickfix as output
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 1
+"let g:ale_set_loclist = 0
+"let g:ale_set_quickfix = 1
 " navigation between erros
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
@@ -359,27 +369,38 @@ let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {}
 let g:LanguageClient_serverCommands = {
     \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'html': ['html-languageserver'],
+    \ 'css': ['css-languageserver'],
+    \ 'json': ['json-languageserver'],
     \ 'go': ['go-langserver'] }
 
 noremap <silent> H :call LanguageClient_textDocument_hover()<CR>
 noremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 noremap <silent> R :call LanguageClient_textDocument_rename()<CR>
-  " Use LanguageServer for omnifunc completion
-  " autocmd FileType go setlocal omnifunc=LanguageClient#complete
 
-  " Use LanguageServer for omnifunc completion
-  " autocmd FileType javascript setlocal omnifunc=LanguageClient#complete
+" Use LanguageServer for omnifunc completion
+autocmd FileType go setlocal omnifunc=LanguageClient#complete
+autocmd FileType javascript setlocal omnifunc=LanguageClient#complete
+autocmd FileType html setlocal omnifunc=LanguageClient#complete
+autocmd FileType css setlocal omnifunc=LanguageClient#complete
+autocmd FileType json setlocal omnifunc=LanguageClient#complete
 
 
 " (Optional) Multi-entry selection UI.
-" Plug 'Shougo/denite.nvim'
+Plug 'Shougo/denite.nvim'
 
 " (Optional) Completion integration with nvim-completion-manager.
-" Plug 'roxma/nvim-completion-manager'
+Plug 'roxma/nvim-completion-manager'
 
 " (Optional) Showing function signature and inline doc.
 Plug 'Shougo/echodoc.vim'
 
+" icons for vim
+Plug 'ryanoasis/vim-devicons'
+set encoding=utf8
+" set guifont=DroidSansMono\ Nerd\ Font\ 11
+" sets airline with nerd fonts
+let g:airline_powerline_fonts = 1
 
 
 " Initialize plugin system
