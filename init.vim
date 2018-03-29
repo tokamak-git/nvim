@@ -44,12 +44,13 @@ set number
 " Line number relative to cursor positon
 set relativenumber
 
-"
 "set foldmethod=syntax
 "set foldlevel=1
 "set foldclose=all
+" Enable folds but open them by default
+""set foldenable foldlevelstart=10
 
-set cursorline 
+set cursorline
 
 " get bash-like tab completions
 set wildmode=longest,list,full
@@ -73,24 +74,26 @@ set breakindent linebreak
 " Allow hidden buffers
 set hidden
 " Set soft maximum line length
-set tw=80
+" set tw=80
 
 " Don't redraw during macros/register usage
 set lazyredraw
 
-" Enable folds but open them by default
-""set foldenable foldlevelstart=10
-
 " write a buff when switching off to it
 set autowrite
 
-" Easy align
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
+" Correctly set localrmdir so as to delete non empty directories
+let g:netrw_localrmdir="rm -r"
 
 " enter newline before or after current line
-nmap <S-Enter> O<Esc>j
+nmap <C-o> O<Esc>j
 nmap <CR> o<Esc>k
+nmap <leader>j i<CR><Esc>k
+
+" enter ; at end of line
+inoremap ;<cr> <end>;
+" enter , at end of line
+inoremap ,<cr> <end>,
 
 " Install Vim Plug if not installed
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
@@ -180,6 +183,8 @@ Plug 'ctrlpvim/ctrlp.vim'
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 
+" Adds prens and brackts etc
+Plug 'raimondi/delimitmate'
 
 " database connection via Vim
 " dbext
@@ -200,7 +205,7 @@ nnoremap <C-S-q> :call ConnectPsqlDb()<cr>
 Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 
-" Linting	
+" Linting
 " Ale
 Plug 'w0rp/ale'
 " Set this. Airline will handle the rest.
@@ -216,10 +221,12 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 "let g:ale_set_loclist = 0
 "let g:ale_set_quickfix = 1
 " navigation between erros
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
+" TODO chance ale commands as they are overwritten by CompleteParameter.vim
+" nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+" nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " js linting
+" let g:neomake_javascript_enabled_makers = ['eslint']
 let g:neomake_javascript_enabled_makers = ['eslint']
 " HTML Linting
 let g:neomake_html_enabled_makers = ['htmlhint']
@@ -230,9 +237,21 @@ let g:neomake_markdown_enabled_makers = ['mdl']
 " Provides Awesome Start Screen for vim
 Plug 'mhinz/vim-startify'
 
+" TODO configure properly
+" gofmt like autoformater
+Plug 'chiel92/vim-autoformat'
+" formats files on save
+" au BufWrite * :Autoformat
+noremap <F3> :Autoformat<CR>
+
 " Css autoPrefixer
 Plug 'ai/autoprefixer'
 Plug 'ioannis-kapoulas/vim-autoprefixer'
+
+" Easy align
+Plug 'junegunn/vim-easy-align'
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
 
 " Auto resizing of vim windows
 Plug 'roman/golden-ratio'
@@ -241,7 +260,7 @@ Plug 'roman/golden-ratio'
 Plug 'airblade/vim-gitgutter'
 
 " color scheme !!Not working correctly
-Plug 'MaxSt/FlatColor'
+" Plug 'MaxSt/FlatColor'
 " autocmd VimEnter * colorscheme flatcolor
 " colorscheme flatcolor
 Plug 'mhinz/vim-janah'
@@ -286,7 +305,7 @@ let g:tagbar_type_go = {
       \ }
 nmap <F8> :TagbarToggle<CR>
 
-" adds liteline status bar to bottom 
+" adds liteline status bar to bottom
 " Plug 'itchyny/lightline.vim'
 " let g:lightline = { 'colorscheme': 'flatcolor' }
 " statusbar vim airline
@@ -294,6 +313,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 let g:airline#extensions#tabline#enabled = 1
 
+" TODO fix autocomplete
 " Code Completion
 " set completeopt+=noinsert
 " deoplete.nvim recommend
@@ -316,23 +336,53 @@ let g:deoplete#omni#input_patterns = get(g:,'deoplete#omni#input_patterns',{})
 " function not found error
 "call deoplete#custom#set('_', 'matchers', ['matcher_full_fuzzy'])
 
+" CompleteParameter is a plugin for complete function's parameters after
+" complete a function
+" https://github.com/tenfyzhong/CompleteParameter.vim
+Plug 'tenfyzhong/CompleteParameter.vim'
+inoremap <silent><expr> ( complete_parameter#pre_complete("()")
+smap <c-j> <Plug>(complete_parameter#goto_next_parameter)
+imap <c-j> <Plug>(complete_parameter#goto_next_parameter)
+smap <c-k> <Plug>(complete_parameter#goto_previous_parameter)
+imap <c-k> <Plug>(complete_parameter#goto_previous_parameter)
+" tern_for_vim
+if !exists('g:neocomplete#force_omni_input_patterns')
+  let g:neocomplete#force_omni_input_patterns = {}
+endif
+let g:neocomplete#force_omni_input_patterns.javascript = '[^. \t]\.\w*'
+" tsuquyomi
+let g:tsuquyomi_completion_detail = 1
+if !exists('g:neocomplete#force_omni_input_patterns')
+  let g:neocomplete#force_omni_input_patterns = {}
+endif
+let g:neocomplete#force_omni_input_patterns.typescript = '[^. *\t]\.\w*\|\h\w*::'
+
 "Javascript Plugins
 Plug 'carlitux/deoplete-ternjs'
-Plug 'ternjs/tern_for_vim', { 'do': 'npm install && npm install -g tern' }
+Plug 'ternjs/tern_for_vim', { 'do': 'npm install -g tern' }
 let g:tern_request_timeout = 1
 let g:tern_request_timeout = 6000
 let g:tern#command = ["tern"]
 let g:tern#arguments = ["--persistent"]
 
 "Typescript Plugins
-" Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-" Plug 'Quramy/tsuquyomi', { 'do': 'npm install -g typescript' }
-" Plug 'mhartington/deoplete-typescript'
-" let g:deoplete#sources#tss#javascript_support = 1
-" let g:tsuquyomi_javascript_support = 1
-" let g:tsuquyomi_auto_open = 1
-" let g:tsuquyomi_disable_quickfix = 1
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+Plug 'Quramy/tsuquyomi', { 'do': 'npm install -g typescript' }
+Plug 'mhartington/deoplete-typescript'
+let g:deoplete#sources#tss#javascript_support = 1
+let g:tsuquyomi_javascript_support = 1
+let g:tsuquyomi_auto_open = 1
+let g:tsuquyomi_disable_quickfix = 1
+let g:tsuquyomi_completion_detail = 1
+" Typescript syntax Highlighting
+Plug 'leafgarland/typescript-vim'
 
+" gofmt for javascript
+" Plug 'mephux/vim-jsfmt', { 'do': 'sudo npm install -g jsfmt' }
+" let g:js_fmt_autosave = 1
+" let g:js_fmt_command = "jsfmt"
+
+" async go completions
 Plug 'zchee/deoplete-go', { 'for': ['go'], 'do': 'make' }
 let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
 let g:deoplete#sources#go#sort_class = [ 'package', 'func', 'type', 'var', 'const' ]
@@ -347,7 +397,7 @@ Plug 'Shougo/neco-vim'
 " Provides completion bases on language syntax
 Plug 'Shougo/neco-syntax'
 
-"debugging
+" go debugging
 Plug 'sebdah/vim-delve'
 
 " Commenting
@@ -357,22 +407,34 @@ Plug 'scrooloose/nerdcommenter'
 " leader e. Seems super slow for some reason?
 Plug 'bkad/CamelCaseMotion'
 
-
 " Vertical alignment
-Plug 'godlygeek/tabular'
+" Plug 'godlygeek/tabular'
+" inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+"
+" function! s:align()
+"   let p = '^\s*|\s.*\s|\s*$'
+"   if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+"     let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+"     let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+"     Tabularize/|/l1
+"     normal! 0
+"     call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+"   endif
+" endfunction
 
 Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
 
 " Minimal LSP configuration for JavaScript
-let g:LanguageClient_serverCommands = {}
+"let g:LanguageClient_serverCommands = {}
 let g:LanguageClient_serverCommands = {
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'html': ['html-languageserver'],
-    \ 'css': ['css-languageserver'],
-    \ 'json': ['json-languageserver'],
-    \ 'go': ['go-langserver'] }
+      \ 'javascript': ['javascript-typescript-stdio'],
+      \ 'typescript': ['javascript-typescript-stdio'],
+      \ 'html': ['html-languageserver'],
+      \ 'css': ['css-languageserver'],
+      \ 'json': ['json-languageserver'],
+      \ 'go': ['go-langserver'] }
 
 noremap <silent> H :call LanguageClient_textDocument_hover()<CR>
 noremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
@@ -381,6 +443,7 @@ noremap <silent> R :call LanguageClient_textDocument_rename()<CR>
 " Use LanguageServer for omnifunc completion
 autocmd FileType go setlocal omnifunc=LanguageClient#complete
 autocmd FileType javascript setlocal omnifunc=LanguageClient#complete
+autocmd FileType typescript setlocal omnifunc=LanguageClient#complete
 autocmd FileType html setlocal omnifunc=LanguageClient#complete
 autocmd FileType css setlocal omnifunc=LanguageClient#complete
 autocmd FileType json setlocal omnifunc=LanguageClient#complete
@@ -402,6 +465,10 @@ set encoding=utf8
 " sets airline with nerd fonts
 let g:airline_powerline_fonts = 1
 
+" ionic syntax highlighting
+Plug 'akz92/vim-ionic2', { 'do': 'npm install -g ionic cordova' }
+" docker syntax
+Plug 'ekalinin/dockerfile.vim'
 
 " Initialize plugin system
 call plug#end()
