@@ -79,6 +79,12 @@ set autowrite
 " Correctly set localrmdir so as to delete non empty directories
 let g:netrw_localrmdir="rm -r"
 
+" keybindings
+"
+nmap <leader>v :vsp<CR>
+nmap <leader>s :sp<CR>
+nmap <leader>z :sp<CR>:term<CR>
+
 " enter newline before or after current line
 nmap <C-o> O<Esc>j
 nmap <CR> o<Esc>k
@@ -90,29 +96,11 @@ inoremap ;<cr> <end>;
 inoremap ,<cr> <end>,
 "
 " << SCHEME AESTHETICS >> {{{
-
 highlight Comment cterm=italic
 highlight Comment gui=italic
 highlight clear SignColumn
 " }}}
 
-" " Word prcessing in vi
-" func! WordProcessor()
-"   " movement changes
-"   map j gj
-"   map k gk
-"   " formatting text
-"   setlocal formatoptions=1
-"   setlocal noexpandtab
-"   setlocal wrap
-"   setlocal linebreak
-"   " spelling and thesaurus
-"   setlocal spell spelllang=en_us
-"   " set thesaurus+=/home/coderiot/.vim/thesaurus/mthesaur.txt
-"   " complete+=s makes autocompletion search the thesaurus
-"   set complete+=s
-" endfu
-" com! WP call WordProcessor()
 
 
 " Install Vim Plug if not installed
@@ -324,7 +312,7 @@ Plug 'sebdah/vim-delve'
 " Set the Delve backend.
 let g:delve_backend = "native"
 autocmd FileType go nmap <leader>t :DlvTest<CR>
-autocmd FileType go nmap <leader>d :DlvDebug<CR>
+autocmd FileType go nmap <leader>d :sp<CR>:e main.go<CR>:DlvDebug<CR>
 autocmd FileType go nmap <leader>b :DlvAddBreakpoint<CR>
 autocmd FileType go nmap <leader>c :DlvClearAll<CR>
 
