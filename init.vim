@@ -51,7 +51,7 @@ set wildmode=longest,list,full
 
 " codeRiot comands
 " toggle spelling
-nnoremap <leader>s :set invspell<CR>
+nnoremap <leader>sp :set invspell<CR>
 
 " scroll is offset so that the curser is always in the center of the screen
 set scrolloff=999
@@ -113,7 +113,7 @@ endif
 " Set the runtime path to include vim plug
 call plug#begin()
 
-set completeopt=noinsert,menuone,noselect
+set completeopt=longest,noinsert,menuone,noselect
 
 " Git
 " fugative
@@ -172,7 +172,7 @@ autocmd FileType go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit'
 autocmd FileType go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
 autocmd FileType go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
 " Revert to godef as def tool
-let g:go_def_mode = 'godef'
+let g:go_def_mode = 'gopls'
 " Identifies what a function accepts and recieves
 " Identifies a function signature
 autocmd FileType go nmap <leader>i <Plug>(go-info)
@@ -199,28 +199,28 @@ Plug 'ctrlpvim/ctrlp.vim'
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 
-" file browser
-Plug 'scrooloose/nerdtree'
-nmap <leader>n :NERDTreeToggle<CR>
+" " file browser
+" Plug 'scrooloose/nerdtree'
+" nmap <leader>n :NERDTreeToggle<CR>
 
 " Adds prens and brackts etc
 Plug 'raimondi/delimitmate'
 
-" database connection via Vim
-" dbext
-Plug 'vim-scripts/dbext.vim'
-" Each profile has the form:
-" g:dbext_default_profile_'profilename' = 'var=value:var=value:...'
-" let g:dbext_default_profile_psql = 'type=PGSQL:host=localhost:port=5433:dbname=dvdtest:user=postgres'
-:function ConnectSQLDb()
-: let g:dbext_default_profile = 'psql'
-: let g:dbext_default_profile_psql = 'type=PGSQL:host=localhost:port=5432:dbname=somedb:user=coderiot'
-: let g:dbext_default_profile_psql = 'type=PGSQL:host=localhost:port=5432:dbname=dvdtest:user=postgres'
-: let g:dbext_default_profile_dvdtest = 'type=PGSQL:host=localhost:port=5432:dbname=dvdtest:user=postgres'
-: let g:dbext_default_profile_insol = 'type=PGSQL:host=localhost:port=5432:dbname=industrialSolutions:user=coderiot'
-: autocmd VimEnter * DBCompleteTables
-:endfunction
-nnoremap <C-S-q> :call ConnectSQLDb()<cr>
+"  " database connection via Vim
+"  " dbext
+"  Plug 'vim-scripts/dbext.vim'
+"  " Each profile has the form:
+"  " g:dbext_default_profile_'profilename' = 'var=value:var=value:...'
+"  " let g:dbext_default_profile_psql = 'type=PGSQL:host=localhost:port=5433:dbname=dvdtest:user=postgres'
+"  :function ConnectSQLDb()
+"  : let g:dbext_default_profile = 'psql'
+"  : let g:dbext_default_profile_psql = 'type=PGSQL:host=localhost:port=5432:dbname=somedb:user=coderiot'
+"  : let g:dbext_default_profile_psql = 'type=PGSQL:host=localhost:port=5432:dbname=dvdtest:user=postgres'
+"  : let g:dbext_default_profile_dvdtest = 'type=PGSQL:host=localhost:port=5432:dbname=dvdtest:user=postgres'
+"  : let g:dbext_default_profile_insol = 'type=PGSQL:host=localhost:port=5432:dbname=industrialSolutions:user=coderiot'
+"  : autocmd VimEnter * DBCompleteTables
+"  :endfunction
+"  nnoremap <C-S-q> :call ConnectSQLDb()<cr>
 
 " Emmet snippets
 Plug 'mattn/emmet-vim'
@@ -230,13 +230,13 @@ let g:user_emmet_leader_key=','
 " Ale
 Plug 'w0rp/ale'
 " Set this. Airline will handle the rest.
-let g:stylelint#extensions#ale#enabled = 1
-let g:airline#extensions#ale#enabled = 1
+" let g:stylelint#extensions#ale#enabled = 1
+" let g:airline#extensions#ale#enabled = 1
 " Enable completion where available.
-let g:ale_completion_enabled = 1
+" let g:ale_completion_enabled = 1
 
 " Write this in your vimrc file
-let g:ale_lint_on_text_changed = 'never'
+" let g:ale_lint_on_text_changed = 'never'
 " You can disable this option too
 " if you don't want linters to run on opening a file
 " let g:ale_lint_on_enter = 0
@@ -251,6 +251,11 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 " navigation between erros
 nmap <silent> <C-S-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-S-j> <Plug>(ale_next_wrap)
+
+"  let g:ale_linters = {
+"        \ 'sh':['language_server'],
+"        \ 'go':['language_server'],
+"        \}
 
 
 " Display
@@ -272,18 +277,13 @@ Plug 'ioannis-kapoulas/vim-autoprefixer'
 " Auto resizing of vim windows
 Plug 'roman/golden-ratio'
 
-" color scheme !!Not working correctly
+" color scheme
 Plug 'mhinz/vim-janah'
 autocmd ColorScheme janah highlight Normal ctermbg=235
-colorscheme janah
 autocmd VimEnter * colorscheme janah
 
-" Css color preview
+" Css color pieview
 Plug 'gorodinskiy/vim-coloresque'
-
-" " eleline staus bar
-" Plug 'liuchengxu/eleline.vim'
-" let g:eleline_powerline_fonts = 1
 
 " statusbar vim airline
 Plug 'vim-airline/vim-airline'
@@ -301,7 +301,6 @@ let g:airline_extensions = ['branch', 'hunks', 'coc']
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 
-
 " VimL completions
 Plug 'Shougo/neco-vim'
 " Provides completion bases on language syntax
@@ -310,10 +309,11 @@ Plug 'Shougo/neco-syntax'
 " go debugging
 Plug 'sebdah/vim-delve'
 " Set the Delve backend.
-let g:delve_backend = "native"
+let g:delve_backend = "default"
 autocmd FileType go nmap <leader>t :DlvTest<CR>
 autocmd FileType go nmap <leader>d :sp<CR>:e main.go<CR>:DlvDebug<CR>
-autocmd FileType go nmap <leader>b :DlvAddBreakpoint<CR>
+autocmd FileType go nmap <leader>m :DlvDebug<CR>
+autocmd FileType go nmap <leader>b :DlvToggleBreakpoint<CR>
 autocmd FileType go nmap <leader>c :DlvClearAll<CR>
 
 " Provides motions for camel case or underscored words, leader w, leader b,
@@ -328,7 +328,9 @@ inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " Use <enter> to confirm complete
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
-
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() :
+      \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " (Optional) Multi-entry selection UI.
 Plug 'junegunn/fzf'
@@ -357,6 +359,9 @@ Plug 'ekalinin/dockerfile.vim'
 
 " i3 syntax highlighting
 Plug 'potatoesmaster/i3-vim-syntax'
+
+" markdown syntax
+Plug 'plasticboy/vim-markdown'
 
 " Initialize plugin system
 call plug#end()
