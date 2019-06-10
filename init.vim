@@ -206,6 +206,12 @@ let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 " Adds prens and brackts etc
 Plug 'raimondi/delimitmate'
 
+" fuzzy function search
+Plug 'tacahiroy/ctrlp-funky'
+nnoremap <Leader>fu :CtrlPFunky<Cr>
+" narrow the list down with a word under cursor
+nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+
 "  " database connection via Vim
 "  " dbext
 "  Plug 'vim-scripts/dbext.vim'
@@ -246,16 +252,16 @@ let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 " sets quickfix as output
-"let g:ale_set_loclist = 0
+let g:ale_set_loclist = 0
 "let g:ale_set_quickfix = 1
 " navigation between erros
 nmap <silent> <C-S-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-S-j> <Plug>(ale_next_wrap)
 
-"  let g:ale_linters = {
-"        \ 'sh':['language_server'],
-"        \ 'go':['language_server'],
-"        \}
+" let g:ale_linters = {
+"       \ 'sh':['language_server'],
+"       \ 'go':['language_server'],
+"       \}
 
 
 " Display
@@ -281,6 +287,16 @@ Plug 'roman/golden-ratio'
 Plug 'mhinz/vim-janah'
 autocmd ColorScheme janah highlight Normal ctermbg=235
 autocmd VimEnter * colorscheme janah
+" Plug 'sickill/vim-monokai'
+" Plug 'tomasr/molokai'
+" Plug 'rickharris/vim-monokai'
+" " syntax enable
+" autocmd VimEnter * colorscheme monokai
+" let g:materialmonokai_italic=1
+" let g:materialmonokai_subtle_spell=1
+" set background=dark
+" set termguicolors
+" let g:airline_theme='materialmonokai'
 
 " Css color pieview
 Plug 'gorodinskiy/vim-coloresque'
@@ -300,6 +316,8 @@ let g:airline_extensions = ['branch', 'hunks', 'coc']
 
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+" sets airline with nerd fonts
+let g:airline_powerline_fonts = 1
 
 " VimL completions
 Plug 'Shougo/neco-vim'
@@ -309,12 +327,15 @@ Plug 'Shougo/neco-syntax'
 " go debugging
 Plug 'sebdah/vim-delve'
 " Set the Delve backend.
-let g:delve_backend = "default"
+let g:delve_new_command = "enew"
+let g:delve_backend = "native"
 autocmd FileType go nmap <leader>t :DlvTest<CR>
 autocmd FileType go nmap <leader>d :sp<CR>:e main.go<CR>:DlvDebug<CR>
 autocmd FileType go nmap <leader>m :DlvDebug<CR>
 autocmd FileType go nmap <leader>b :DlvToggleBreakpoint<CR>
 autocmd FileType go nmap <leader>c :DlvClearAll<CR>
+
+Plug 'go-delve/delve'
 
 " Provides motions for camel case or underscored words, leader w, leader b,
 " leader e. Seems super slow for some reason?
@@ -335,7 +356,6 @@ autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 " (Optional) Multi-entry selection UI.
 Plug 'junegunn/fzf'
 
-
 " " based on ultisnips
 " Plug 'ncm2/ncm2-ultisnips'
 Plug 'SirVer/ultisnips'
@@ -350,9 +370,6 @@ Plug 'leafgarland/typescript-vim'
 " icons for vim
 Plug 'ryanoasis/vim-devicons'
 set encoding=utf8
-" set guifont=DroidSansMono\ Nerd\ Font\ 11
-" sets airline with nerd fonts
-let g:airline_powerline_fonts = 1
 
 " docker syntax
 Plug 'ekalinin/dockerfile.vim'
@@ -362,6 +379,10 @@ Plug 'potatoesmaster/i3-vim-syntax'
 
 " markdown syntax
 Plug 'plasticboy/vim-markdown'
+
+" Plug 'shougo/echodoc'
+" set cmdheight=2
+
 
 " Initialize plugin system
 call plug#end()

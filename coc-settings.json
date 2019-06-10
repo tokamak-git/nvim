@@ -1,0 +1,34 @@
+{
+  // signature
+  "suggest.triggerAfterInsertEnter": true,
+  "suggest.enablePreview": true,
+  "suggest.echodocSupport": true,
+
+  // diagnostics
+  "diagnostic.enable": true,
+  "diagnostic.messageTarget": "echo",
+  "diagnostic.refreshOnInsertMode": true,
+
+  // Prefences
+  "coc.preferences.hoverTarget": "echo",
+
+  // Language servers
+  "languageserver": {
+    "golang": {
+      "command": "gopls",
+      "rootPatterns": ["vendor/", "go.mod", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["go"]
+    },
+    "dockerfile": {
+      "command": "docker-langserver",
+      "filetypes": ["dockerfile"],
+      "args": ["--stdio"]
+    },
+    "bash": {
+      "command": "bash-language-server",
+      "args": ["start"],
+      "filetypes": ["sh"],
+      "ignoredRootPaths": ["~"]
+    }
+  }
+}
