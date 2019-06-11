@@ -165,7 +165,7 @@ autocmd FileType go nmap <leader>r <Plug>(go-run)
 " map function build_go_files to shortcut
 "autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
 " Toggle GoCoverage
-autocmd FileType go nmap <leader>c <Plug>(go-coverage-toggle)
+autocmd FileType go nmap <leader>gc <Plug>(go-coverage-toggle)
 " Alternating between gofiles
 autocmd FileType go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
 autocmd FileType go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
@@ -189,6 +189,9 @@ let g:go_auto_sameids = 1
 map <C-n> :cnext<CR>
 map <C-p> :cprevious<CR>
 nnoremap <leader>a :cclose<CR>
+
+autocmd FileType go nmap <leader>gde  call go#alternate#Switch(<bang>0, 'GoDecals')
+
 " vim-go end
 
 " Some refactoring tools

@@ -16,7 +16,8 @@
   "languageserver": {
     "golang": {
       "command": "gopls",
-      "rootPatterns": ["vendor/", "go.mod", ".vim/", ".git/", ".hg/"],
+      "args": [],
+      "rootPatterns": ["vendor/", "go.mod", ".vim/", ".git/", ".hg/", "~/go/src/"],
       "filetypes": ["go"]
     },
     "dockerfile": {
