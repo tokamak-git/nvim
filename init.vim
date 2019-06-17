@@ -173,6 +173,7 @@ autocmd FileType go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
 autocmd FileType go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
 " Revert to godef as def tool
 let g:go_def_mode = 'gopls'
+let g:go_info_mode='gopls'
 " Identifies what a function accepts and recieves
 " Identifies a function signature
 autocmd FileType go nmap <leader>i <Plug>(go-info)
@@ -203,17 +204,17 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 
 " " file browser
-" Plug 'scrooloose/nerdtree'
-" nmap <leader>n :NERDTreeToggle<CR>
+Plug 'scrooloose/nerdtree'
+nmap <leader>n :NERDTreeToggle<CR>
 
 " Adds prens and brackts etc
 Plug 'raimondi/delimitmate'
 
 " fuzzy function search
 Plug 'tacahiroy/ctrlp-funky'
-nnoremap <Leader>fu :CtrlPFunky<Cr>
+nnoremap <leader>fu :CtrlPFunky<Cr>
 " narrow the list down with a word under cursor
-nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+nnoremap <leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
 
 "  " database connection via Vim
 "  " dbext
@@ -261,15 +262,15 @@ let g:ale_set_loclist = 0
 nmap <silent> <C-S-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-S-j> <Plug>(ale_next_wrap)
 
-" let g:ale_linters = {
-"       \ 'sh':['language_server'],
-"       \ 'go':['language_server'],
-"       \}
+let g:ale_linters = {
+      \ 'sh':['language_server'],
+      \ 'go':['gopls'],
+      \}
 
 
 " Display
 " Provides Awesome Start Screen for vim
-Plug 'mhinz/vim-startify'
+" Plug 'mhinz/vim-startify'
 
 " TODO configure properly
 " gofmt like autoformater
@@ -331,7 +332,7 @@ Plug 'Shougo/neco-syntax'
 Plug 'sebdah/vim-delve'
 " Set the Delve backend.
 let g:delve_new_command = "enew"
-let g:delve_backend = "native"
+let g:delve_backend = "default"
 autocmd FileType go nmap <leader>t :DlvTest<CR>
 autocmd FileType go nmap <leader>d :sp<CR>:e main.go<CR>:DlvDebug<CR>
 autocmd FileType go nmap <leader>m :DlvDebug<CR>
@@ -344,17 +345,30 @@ Plug 'go-delve/delve'
 " leader e. Seems super slow for some reason?
 Plug 'bkad/CamelCaseMotion'
 
+" completion
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup = 1
+" call deoplete#custom#option('omni_patterns', {
+"       \ 'go': '[^. *\t]\.\w*',
+"       \})
+Plug 'zchee/deoplete-go', { 'do': 'make' }
 
-" coc completion interacts with langserver
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
-" Use <Tab> and <S-Tab> for navigate completion list:
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" Use <enter> to confirm complete
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() :
-      \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+Plug 'autozimu/LanguageClient-neovim', {
+      \ 'branch': 'next',
+      \ 'do': 'bash install.sh',
+      \ }
+
+let g:LanguageClient_serverCommands = {
+      \ 'go': ['gopls'],
+      \ 'dockerfile': ['docker-langserver'],
+      \ 'sh': ['bash-language-server'],
+      \ }
+
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" Or map each action separately
+nnoremap <silent>K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent>gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <leader>re  :call LanguageClient#textDocument_rename()<CR>
 
 " (Optional) Multi-entry selection UI.
 Plug 'junegunn/fzf'
