@@ -358,6 +358,9 @@ Plug 'autozimu/LanguageClient-neovim', {
       \ 'do': 'bash install.sh',
       \ }
 
+let g:LanguageClient_selectionUI = "fzf"
+let g:LanguageClient_diagnosticsEnable = 0
+
 let g:LanguageClient_serverCommands = {
       \ 'go': ['gopls'],
       \ 'dockerfile': ['docker-langserver'],
@@ -370,16 +373,20 @@ nnoremap <silent>K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent>gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <leader>re  :call LanguageClient#textDocument_rename()<CR>
 
+
+
 " (Optional) Multi-entry selection UI.
 Plug 'junegunn/fzf'
 
-" " based on ultisnips
-" Plug 'ncm2/ncm2-ultisnips'
+" based on ultisnips
+Plug 'roxma/nvim-completion-manager'
+imap <expr> <CR> (pumvisible() ? "\<C-Y>\<Plug>(expand_or_cr)" : "\<CR>")
+imap <expr> <Plug>(expand_or_cr) (cm#completed_is_snippet() ? "\<C-U>" : "\<CR>")
 Plug 'SirVer/ultisnips'
-" Press enter key to trigger snippet expansion
-" The parameters are the same as `:help feedkeys()`
-" inoremap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<CR>", 'n')
-"
+let g:UltiSnipsExpandTrigger = "<Plug>(ultisnips_expand)"
+inoremap <silent> <C-U> <C-R>=cm#sources#ultisnips#trigger_or_popup("\<Plug>(ultisnips_expand)")<CR>
+let g:UltiSnipsJumpForwardTrigger = "<C-J>"
+let g:UltiSnipsJumpBackwardTrigger = "<C-K>"
 
 " Typescript syntax Highlighting
 Plug 'leafgarland/typescript-vim'
@@ -397,9 +404,11 @@ Plug 'potatoesmaster/i3-vim-syntax'
 " markdown syntax
 Plug 'plasticboy/vim-markdown'
 
-" Plug 'shougo/echodoc'
-" set cmdheight=2
+Plug 'Shougo/echodoc.vim'
 
+set cmdheight=2
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'signature'
 
 " Initialize plugin system
 call plug#end()
