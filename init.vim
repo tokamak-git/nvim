@@ -279,7 +279,9 @@ Plug 'go-delve/delve'
 Plug 'bkad/CamelCaseMotion'
 
 " (Optional) Multi-entry selection UI.
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+
 " icons for vim
 Plug 'ryanoasis/vim-devicons'
 set encoding=utf8
