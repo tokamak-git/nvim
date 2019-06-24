@@ -9,15 +9,12 @@
   "diagnostic.messageTarget": "echo",
   "diagnostic.refreshOnInsertMode": true,
 
-  // Prefences
-  "coc.preferences.hoverTarget": "echo",
-
   // Language servers
   "languageserver": {
     "golang": {
       "command": "gopls",
       "args": [],
-      "rootPatterns": ["vendor/", "go.mod", ".vim/", ".git/", ".hg/", "~/go/src/"],
+      "rootPatterns": ["vendor/", "go.mod",  "~/go/src/", ".vim/", ".git/", ".hg/"],
       "filetypes": ["go"]
     },
     "dockerfile": {

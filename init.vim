@@ -122,19 +122,9 @@ autocmd QuickFixCmdPost *grep* cwindow
 " Git gutter
 Plug 'airblade/vim-gitgutter'
 
-" Plug 'shemerey/vim-project'
-
 " Go integration
 " Vim-go
 Plug 'fatih/vim-go', { 'for': ['go'], 'do': ':GoInstallBinaries' }
-" let g:go_fmt_command = 'goimports'
-"
-" let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
-" " Attempt at speeding up save timing
-" " let g:go_metalinter_autosave_enabled = ['vet', 'golint', 'errcheck']
-" let g:go_metalinter_autosave_enabled = ['vet', 'golint']
-" let g:go_metalinter_autosave = 1
-
 " Highlights parts of go code
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
@@ -143,7 +133,6 @@ let g:go_highlight_types = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
-
 let g:go_term_mode='split'
 let g:go_term_height=20
 let g:go_term_enabled=1
@@ -152,18 +141,6 @@ let g:go_term_enabled=1
 autocmd FileType go nmap <leader>bl <Plug>(go-build)
 autocmd FileType go nmap <leader>gt <Plug>(go-test)
 autocmd FileType go nmap <leader>r <Plug>(go-run)
-
-" run :GoBuild or :GoTestCompile based on the go file
-"function! s:build_go_files()
-" let l:file = expand('%')
-"  if l:file =~# '^\f\+_test\.go$'
-"    call go#test#Test(0,1)
-"  elseif l:file =~# '^\f\+\.go$'
-"    call go#cmd#Build(0)
-"  endif
-"endfunction
-" map function build_go_files to shortcut
-"autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
 " Toggle GoCoverage
 autocmd FileType go nmap <leader>gc <Plug>(go-coverage-toggle)
 " Alternating between gofiles
@@ -181,12 +158,6 @@ let g:go_auto_type_info = 1
 " Automaticly highlights matching identifiers
 let g:go_auto_sameids = 1
 " All lists will be type quick
-" let g:go_list_type = 'quickfix'
-
-" Times out go test default 10s
-" let g:go_test_timeout = '10s'
-
-" Moving between errors found by vim-go and closing the error window
 map <C-n> :cnext<CR>
 map <C-p> :cprevious<CR>
 nnoremap <leader>a :cclose<CR>
@@ -195,13 +166,15 @@ autocmd FileType go nmap <leader>gde  call go#alternate#Switch(<bang>0, 'GoDecal
 
 " vim-go end
 
-" Some refactoring tools
-Plug 'godoctor/godoctor.vim'
-
 " Fuzzy file loader
 Plug 'ctrlpvim/ctrlp.vim'
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+" fuzzy function search
+Plug 'tacahiroy/ctrlp-funky'
+nnoremap <leader>fu :CtrlPFunky<Cr>
+" narrow the list down with a word under cursor
+nnoremap <leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
 
 " " file browser
 Plug 'scrooloose/nerdtree'
@@ -209,32 +182,6 @@ nmap <leader>n :NERDTreeToggle<CR>
 
 " Adds prens and brackts etc
 Plug 'raimondi/delimitmate'
-
-" fuzzy function search
-Plug 'tacahiroy/ctrlp-funky'
-nnoremap <leader>fu :CtrlPFunky<Cr>
-" narrow the list down with a word under cursor
-nnoremap <leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
-
-"  " database connection via Vim
-"  " dbext
-"  Plug 'vim-scripts/dbext.vim'
-"  " Each profile has the form:
-"  " g:dbext_default_profile_'profilename' = 'var=value:var=value:...'
-"  " let g:dbext_default_profile_psql = 'type=PGSQL:host=localhost:port=5433:dbname=dvdtest:user=postgres'
-"  :function ConnectSQLDb()
-"  : let g:dbext_default_profile = 'psql'
-"  : let g:dbext_default_profile_psql = 'type=PGSQL:host=localhost:port=5432:dbname=somedb:user=coderiot'
-"  : let g:dbext_default_profile_psql = 'type=PGSQL:host=localhost:port=5432:dbname=dvdtest:user=postgres'
-"  : let g:dbext_default_profile_dvdtest = 'type=PGSQL:host=localhost:port=5432:dbname=dvdtest:user=postgres'
-"  : let g:dbext_default_profile_insol = 'type=PGSQL:host=localhost:port=5432:dbname=industrialSolutions:user=coderiot'
-"  : autocmd VimEnter * DBCompleteTables
-"  :endfunction
-"  nnoremap <C-S-q> :call ConnectSQLDb()<cr>
-
-" Emmet snippets
-Plug 'mattn/emmet-vim'
-let g:user_emmet_leader_key=','
 
 " Linting
 " Ale
@@ -280,10 +227,6 @@ au BufWrite * :Autoformat
 " file types for which autoindent shall not work
 autocmd FileType dockerfile,yaml,yml,csv let b:autoformat_autoindent=0
 
-" Css autoPrefixer
-Plug 'ai/autoprefixer'
-Plug 'ioannis-kapoulas/vim-autoprefixer'
-
 " Auto resizing of vim windows
 Plug 'roman/golden-ratio'
 
@@ -291,16 +234,6 @@ Plug 'roman/golden-ratio'
 Plug 'mhinz/vim-janah'
 autocmd ColorScheme janah highlight Normal ctermbg=235
 autocmd VimEnter * colorscheme janah
-" Plug 'sickill/vim-monokai'
-" Plug 'tomasr/molokai'
-" Plug 'rickharris/vim-monokai'
-" " syntax enable
-" autocmd VimEnter * colorscheme monokai
-" let g:materialmonokai_italic=1
-" let g:materialmonokai_subtle_spell=1
-" set background=dark
-" set termguicolors
-" let g:airline_theme='materialmonokai'
 
 " Css color pieview
 Plug 'gorodinskiy/vim-coloresque'
@@ -345,52 +278,8 @@ Plug 'go-delve/delve'
 " leader e. Seems super slow for some reason?
 Plug 'bkad/CamelCaseMotion'
 
-" completion
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
-" call deoplete#custom#option('omni_patterns', {
-"       \ 'go': '[^. *\t]\.\w*',
-"       \})
-Plug 'zchee/deoplete-go', { 'do': 'make' }
-
-Plug 'autozimu/LanguageClient-neovim', {
-      \ 'branch': 'next',
-      \ 'do': 'bash install.sh',
-      \ }
-
-let g:LanguageClient_selectionUI = "fzf"
-let g:LanguageClient_diagnosticsEnable = 0
-
-let g:LanguageClient_serverCommands = {
-      \ 'go': ['gopls'],
-      \ 'dockerfile': ['docker-langserver'],
-      \ 'sh': ['bash-language-server'],
-      \ }
-
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-" Or map each action separately
-nnoremap <silent>K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent>gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <leader>re  :call LanguageClient#textDocument_rename()<CR>
-
-
-
 " (Optional) Multi-entry selection UI.
 Plug 'junegunn/fzf'
-
-" based on ultisnips
-Plug 'roxma/nvim-completion-manager'
-imap <expr> <CR> (pumvisible() ? "\<C-Y>\<Plug>(expand_or_cr)" : "\<CR>")
-imap <expr> <Plug>(expand_or_cr) (cm#completed_is_snippet() ? "\<C-U>" : "\<CR>")
-Plug 'SirVer/ultisnips'
-let g:UltiSnipsExpandTrigger = "<Plug>(ultisnips_expand)"
-inoremap <silent> <C-U> <C-R>=cm#sources#ultisnips#trigger_or_popup("\<Plug>(ultisnips_expand)")<CR>
-let g:UltiSnipsJumpForwardTrigger = "<C-J>"
-let g:UltiSnipsJumpBackwardTrigger = "<C-K>"
-
-" Typescript syntax Highlighting
-Plug 'leafgarland/typescript-vim'
-
 " icons for vim
 Plug 'ryanoasis/vim-devicons'
 set encoding=utf8
@@ -404,11 +293,11 @@ Plug 'potatoesmaster/i3-vim-syntax'
 " markdown syntax
 Plug 'plasticboy/vim-markdown'
 
-Plug 'Shougo/echodoc.vim'
-
-set cmdheight=2
-let g:echodoc#enable_at_startup = 1
-let g:echodoc#type = 'signature'
+" completion
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Initialize plugin system
 call plug#end()
