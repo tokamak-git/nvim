@@ -223,9 +223,9 @@ let g:ale_linters = {
 " gofmt like autoformater
 Plug 'chiel92/vim-autoformat'
 " auto formats on save
-au BufWrite * :Autoformat
+au BufWrite sh :Autoformat
 " file types for which autoindent shall not work
-autocmd FileType dockerfile,yaml,yml,csv let b:autoformat_autoindent=0
+" autocmd FileType dockerfile,yaml,yml,csv let b:autoformat_autoindent=0
 
 " Auto resizing of vim windows
 Plug 'roman/golden-ratio'
