@@ -224,7 +224,7 @@ let g:ale_linters = {
 " gofmt like autoformater
 Plug 'chiel92/vim-autoformat'
 " auto formats on save
-au BufWrite sh :Autoformat
+au BufWrite go,sh :Autoformat
 " file types for which autoindent shall not work
 " autocmd FileType dockerfile,yaml,yml,csv let b:autoformat_autoindent=0
 
@@ -297,10 +297,44 @@ Plug 'potatoesmaster/i3-vim-syntax'
 Plug 'plasticboy/vim-markdown'
 
 " completion
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+set cmdheight=2 " better display for messages
+set updatetime=300 " smaller updatetime for cursorhold and cursorholdi
+set shortmess+=c "dont give \|ins-completion-menu\| messages
+set signcolumn=yes " always show sign columns
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<CR>" :
+      \ coc#refresh()
+inoremap <expr><S-CR> pumvisible() ? "\<C-p>" : "\<C-h>"<Paste>
+function! s:check_back_space() abort
+	let col = col('.') - 1
+	return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use `[c` and `]c` to navigate diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use U to show documentation in preview window
+nnoremap <silent> U :call <SID>show_documentation()<CR>
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" Find symbol of current document
+nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <leader>s  :<C-u>CocList -I symbols<cr>
 
 " Initialize plugin system
 call plug#end()
