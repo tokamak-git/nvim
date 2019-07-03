@@ -136,6 +136,7 @@ let g:go_highlight_build_constraints = 1
 let g:go_term_mode='split'
 let g:go_term_height=20
 let g:go_term_enabled=1
+" let g:go_def_mapping_enabled = 0
 
 " Shortcuts to build, test and run Go programs
 autocmd FileType go nmap <leader>bl <Plug>(go-build)
