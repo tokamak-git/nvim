@@ -126,6 +126,7 @@ Plug 'airblade/vim-gitgutter'
 " Vim-go
 Plug 'fatih/vim-go', { 'for': ['go'], 'do': ':GoInstallBinaries' }
 " Highlights parts of go code
+let g:go_fmt_command = "goimports"
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_fields = 1
@@ -169,8 +170,10 @@ autocmd FileType go nmap <leader>gde  call go#alternate#Switch(<bang>0, 'GoDecal
 
 " Fuzzy file loader
 Plug 'ctrlpvim/ctrlp.vim'
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/vendor     " MacOSX/Linux
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_map = '<leader>p'
+let g:ctrlp_cmd = 'CtrlP'
 " fuzzy function search
 Plug 'tacahiroy/ctrlp-funky'
 nnoremap <leader>fu :CtrlPFunky<Cr>
@@ -211,7 +214,9 @@ nmap <silent> <C-S-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-S-j> <Plug>(ale_next_wrap)
 
 let g:ale_linters = {
-      \ 'sh':['language_server'],
+      \ 'sh':['bash-language_server'],
+      \ 'php': ['intelephense'],
+      \ 'dockerfile': ['docker-langserver'],
       \ 'go':['gopls'],
       \}
 
@@ -224,7 +229,7 @@ let g:ale_linters = {
 " gofmt like autoformater
 Plug 'chiel92/vim-autoformat'
 " auto formats on save
-au BufWrite go,sh :Autoformat
+au BufWrite json,sh :Autoformat
 " file types for which autoindent shall not work
 " autocmd FileType dockerfile,yaml,yml,csv let b:autoformat_autoindent=0
 
@@ -316,8 +321,9 @@ function! s:check_back_space() abort
 endfunction
 
 " Use `[c` and `]c` to navigate diagnostics
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
+" interfeares while in vim diff
+" nmap <silent> [c <Plug>(coc-diagnostic-prev)
+" nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
