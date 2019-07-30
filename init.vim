@@ -300,6 +300,7 @@ Plug 'potatoesmaster/i3-vim-syntax'
 
 " markdown syntax
 Plug 'plasticboy/vim-markdown'
+set g:vim_markdown_folding_disabled = 1
 
 " completion
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
@@ -326,7 +327,7 @@ endfunction
 " nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gd :sp<CR>:coc-definition<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
