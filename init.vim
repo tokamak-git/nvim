@@ -300,7 +300,7 @@ Plug 'potatoesmaster/i3-vim-syntax'
 
 " markdown syntax
 Plug 'plasticboy/vim-markdown'
-set g:vim_markdown_folding_disabled = 1
+" set g:vim_markdown_folding_disabled = 1
 
 " completion
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
