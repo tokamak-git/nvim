@@ -105,9 +105,27 @@ highlight clear SignColumn
 
 " Install Vim Plug if not installed
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
-  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall
+	silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+				\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	autocmd VimEnter * PlugInstall
+
+endif
+
+" install golang if not found
+if !executable('go')
+" need to set this up for later
+endif
+
+" Install python2 if it does not exist
+if !executable('python2')
+	!sudo apt install python2
+	!sudo pip2 install pynvim
+endif
+
+" Install python3 if it does not exist
+if !executable('python3')
+	!sudo apt install python3
+	!sudo pip3 install pynvim
 endif
 
 " Set the runtime path to include vim plug
@@ -214,11 +232,11 @@ nmap <silent> <C-S-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-S-j> <Plug>(ale_next_wrap)
 
 let g:ale_linters = {
-      \ 'sh':['bash-language_server'],
-      \ 'php': ['intelephense'],
-      \ 'dockerfile': ['docker-langserver'],
-      \ 'go':['gopls'],
-      \}
+			\ 'sh':['bash-language_server'],
+			\ 'php': ['intelephense'],
+			\ 'dockerfile': ['docker-langserver'],
+			\ 'go':['gopls'],
+			\}
 
 
 " Display
@@ -282,7 +300,14 @@ Plug 'go-delve/delve'
 
 " Provides motions for camel case or underscored words, leader w, leader b,
 " leader e. Seems super slow for some reason?
-Plug 'bkad/CamelCaseMotion'
+" Plug 'bkad/CamelCaseMotion'
+
+" jsonnet syntax highlight
+Plug 'google/vim-jsonnet'
+" toml syntax highlight
+Plug 'toml-lang/toml'
+" yaml syntax highlight and indent
+Plug 'mrk21/yaml-vim'
 
 " (Optional) Multi-entry selection UI.
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -312,9 +337,9 @@ set signcolumn=yes " always show sign columns
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<CR>" :
-      \ coc#refresh()
+			\ pumvisible() ? "\<C-n>" :
+			\ <SID>check_back_space() ? "\<CR>" :
+			\ coc#refresh()
 inoremap <expr><S-CR> pumvisible() ? "\<C-p>" : "\<C-h>"<Paste>
 function! s:check_back_space() abort
 	let col = col('.') - 1
@@ -341,7 +366,7 @@ nmap <leader>rn <Plug>(coc-rename)
 " Find symbol of current document
 nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
 " Search workspace symbols
-nnoremap <silent> <leader>s  :<C-u>CocList -I symbols<cr>
+nnoremap <silent> <leader>sr  :<C-u>CocList -I symbols<cr>
 
 " Initialize plugin system
 call plug#end()
