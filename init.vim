@@ -1,8 +1,6 @@
-" Disable compatibility with old-time vi
-set nocompatible
-
 " Sets \ as the leader for vim
 let mapleader="\<space>"
+let maplocalleader = "\\"
 
 " Resets autocmd
 autocmd!
@@ -28,6 +26,10 @@ set expandtab
 
 " Filetype detection
 filetype plugin indent on
+
+" force vim to set syntax for mozart test files
+au BufNewFile,BufRead *.input set filetype=json
+au BufNewFile,BufRead *.golden set filetype=json
 
 " Incremental Search
 set incsearch
@@ -101,7 +103,8 @@ highlight Comment gui=italic
 highlight clear SignColumn
 " }}}
 
-
+" Disable compatibility with old-time vi
+set nocompatible
 
 " Install Vim Plug if not installed
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
@@ -183,7 +186,9 @@ map <C-p> :cprevious<CR>
 nnoremap <leader>a :cclose<CR>
 
 autocmd FileType go nmap <leader>gde  call go#alternate#Switch(<bang>0, 'GoDecals')
-
+" disable vim-go :GoDef short cut (gd)
+" this is handled by LanguageClient [LC]
+" let g:go_def_mapping_enabled = 0
 " vim-go end
 
 " Fuzzy file loader
@@ -199,8 +204,8 @@ nnoremap <leader>fu :CtrlPFunky<Cr>
 nnoremap <leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
 
 " " file browser
-Plug 'scrooloose/nerdtree'
-nmap <leader>n :NERDTreeToggle<CR>
+" Plug 'scrooloose/nerdtree'
+" nmap <leader>n :NERDTreeToggle<CR>
 
 " Adds prens and brackts etc
 Plug 'raimondi/delimitmate'
@@ -323,9 +328,36 @@ Plug 'ekalinin/dockerfile.vim'
 " i3 syntax highlighting
 Plug 'potatoesmaster/i3-vim-syntax'
 
+
+"  "vim wiki
+"  Plug 'vimwiki/vimwiki'
+"  " Vim Wiki
+"  let g:vimwiki_list = [{'path': '~/Sync/wiki/', 'syntax': 'markdown'}]
+"  au FileType vimwiki setlocal shiftwidth=6 tabstop=6 noexpandtab
+
+" Todo.txt plugin
+Plug 'freitass/todo.txt-vim'
+
+
+" org mode for vi
+Plug 'dhruvasagar/vim-dotoo'
+
 " markdown syntax
 Plug 'plasticboy/vim-markdown'
 " set g:vim_markdown_folding_disabled = 1
+
+" vim auto correct text files
+Plug 'sedm0784/vim-you-autocorrect'
+autocmd FileType txt set EnableAutocorrect=1
+
+" echo doc
+Plug 'shougo/echodoc'
+" Or, you could use neovim's floating text feature.
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'floating'
+" To use a custom highlight for the float window,
+" change Pmenu to your highlight group
+" highlight link EchoDocFloat Pmenu
 
 " completion
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
@@ -334,17 +366,9 @@ set updatetime=300 " smaller updatetime for cursorhold and cursorholdi
 set shortmess+=c "dont give \|ins-completion-menu\| messages
 set signcolumn=yes " always show sign columns
 
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-			\ pumvisible() ? "\<C-n>" :
-			\ <SID>check_back_space() ? "\<CR>" :
-			\ coc#refresh()
-inoremap <expr><S-CR> pumvisible() ? "\<C-p>" : "\<C-h>"<Paste>
-function! s:check_back_space() abort
-	let col = col('.') - 1
-	return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" close preview window when completion is done
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " Use `[c` and `]c` to navigate diagnostics
 " interfeares while in vim diff
@@ -352,10 +376,12 @@ endfunction
 " nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
-nmap <silent> gd :sp<CR>:coc-definition<CR>
+" nmap <silent> gd <Plu>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+" coc file browser
+nmap <leader>n :CocCommand explorer<CR>
 
 " Use U to show documentation in preview window
 nnoremap <silent> U :call <SID>show_documentation()<CR>
